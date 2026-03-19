@@ -37,8 +37,12 @@ jobs:
               if: success()
             - name: Send email (dynamic template)
               run: |
-                  python3 -m pip install sendgrid
-                  python3 scripts/send_email_dynamic.py
+                  if [ -n "${{ secrets.SENDGRID_API_KEY }}" ]; then
+                      python3 -m pip install sendgrid
+                      python3 scripts/send_email_dynamic.py
+                  else
+                      echo "SendGrid API key not configured, skipping email notification"
+                  fi
               env:
                   SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
                   SENDGRID_FROM_EMAIL: ${{ secrets.SENDGRID_FROM_EMAIL }}
