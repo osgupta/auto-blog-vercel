@@ -27,10 +27,8 @@ jobs:
                   git add content/posts/*.md
                   git commit -m "chore: auto-publish daily post" || echo "No changes to commit"
             - name: Push changes
-              uses: ad-m/github-push-action@v0.6.0
-              with:
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
-                  branch: main
+              run: git push origin main
+              if: success()
             - name: Send email (dynamic template)
               run: |
                   python3 -m pip install sendgrid

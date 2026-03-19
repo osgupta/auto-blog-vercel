@@ -16,6 +16,6 @@ def main(title, url, to_email):
 if __name__ == '__main__':
     main(
 'Daily AI Insight: A Practical Quickstart',
-'https://your-vercel-site.vercel.app/posts/2026-03-20-daily-ai-insight',
+'https://blog-vercel-lake.vercel.app/posts/2026-03-20-daily-ai-insight',
 os.environ['EMAIL_TO']
 )
