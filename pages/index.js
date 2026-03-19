@@ -14,7 +14,7 @@ export async function getStaticProps() {
         return {
             frontMatter: data,
             content: md.render(content),
-            slug: filename.replace(/.md$/, '')
+            slug: filename.replace(/\.md$/, '')
         };
     });
     return { props: { posts } };
@@ -27,10 +27,10 @@ export default function Home({ posts }) {
             <ul>
                 {posts.map(p => (
                     <li key={p.slug}>
-                        <a href={/posts/${p.slug}}>{p.frontMatter.title}</a> - { p.frontMatter.date }
-</li>
-))}
-        </ul>
-</div >
-);
+                        <a href={`/posts/${p.slug}`}>{p.frontMatter.title}</a> - {p.frontMatter.date}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 }
