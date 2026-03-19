@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-from datetime import date, datetime
+from datetime import datetime
 from pathlib import Path
-from turtle import title
 
 def generate_title():
     return "Daily AI Insight: A Practical Quickstart"
@@ -21,13 +20,14 @@ def main():
     post_dir.mkdir(parents=True, exist_ok=True)
     slug = date + '-' + title.lower().replace(' ', '-')
     md = f"""---
-    date: {date}
+date: {date}
+title: {title}
+---
 
-    title: {title}
-    {body}
-    ---"""
-(post_dir / f"{slug}.md").write_text(md, encoding='utf-8')
-print(f"Generated post: {slug}.md")
+{body}
+"""
+    (post_dir / f"{slug}.md").write_text(md, encoding='utf-8')
+    print(f"Generated post: {slug}.md")
 
 if __name__ == '__main__':
     main()
