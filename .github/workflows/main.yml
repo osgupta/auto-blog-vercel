@@ -1,45 +1,41 @@
 name: Daily Blog Post
 
 on:
-schedule:
-- cron: '0 0 * * *'
-push:
-branches:
-- main
+    schedule:
+        - cron: "0 0 * * *"
+    push:
+        branches:
+            - main
 
 jobs:
-build-and-deploy:
-runs-on: ubuntu-latest
-steps:
-- uses: actions/checkout@v4
-- name: Set up Python
-uses: actions/setup-python@v5
-with:
-  python-version: '3.x'
-- name: Install dependencies
-run: |
-python3 -m pip install --upgrade pip
-- name: Generate post
-run: python3 scripts/generate_post.py
-- name: Commit post
-run: |
-git config --local user.name "Auto Blog Bot"
-git config --local user.email "noreply@example.com"
-git add content/posts/*.md
-git commit -m "chore: auto-publish daily post"
-- name: Push changes
-uses: ad-m/github-push-action@v0.6.0
-with:
-github_token: ${{ secrets.GITHUB_TOKEN }}
-- name: Send email (dynamic template)
-run: |
-python3 -m venv venv
-. venv/bin/activate
-pip install --upgrade pip
-pip install sendgrid
-python3 scripts/send_email_dynamic.py
-env:
-SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
-SENDGRID_FROM_EMAIL: ${{ secrets.SENDGRID_FROM_EMAIL }}
-EMAIL_TO: ${{ secrets.EMAIL_TO }}
-SENDGRID_TEMPLATE_ID: ${{ secrets.SENDGRID_TEMPLATE_ID }}
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.x"
+            - name: Install dependencies
+              run: python3 -m pip install --upgrade pip
+            - name: Generate post
+              run: python3 scripts/generate_post.py
+            - name: Commit post
+              run: |
+                  git config --local user.name "Auto Blog Bot"
+                  git config --local user.email "noreply@example.com"
+                  git add content/posts/*.md
+                  git commit -m "chore: auto-publish daily post" || echo "No changes to commit"
+            - name: Push changes
+              uses: ad-m/github-push-action@v0.6.0
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+            - name: Send email (dynamic template)
+              run: |
+                  python3 -m pip install sendgrid
+                  python3 scripts/send_email_dynamic.py
+              env:
+                  SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+                  SENDGRID_FROM_EMAIL: ${{ secrets.SENDGRID_FROM_EMAIL }}
+                  EMAIL_TO: ${{ secrets.EMAIL_TO }}
+                  SENDGRID_TEMPLATE_ID: ${{ secrets.SENDGRID_TEMPLATE_ID }}
