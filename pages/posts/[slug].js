@@ -5,9 +5,9 @@ import MarkdownIt from 'markdown-it';
 
 export async function getStaticPaths() {
     const dir = path.join(process.cwd(), 'content', 'posts');
-    const files = fs.readdirSync(dir).filter(f => f.endsWith('.md'));
-    const paths = files.map(f => ({
-        params: { slug: f.replace(/.md$/, '') }
+    const files = fs.readdirSync(dir).filter((f) => f.endsWith('.md'));
+    const paths = files.map((f) => ({
+        params: { slug: f.replace(/\.md$/, '') } // escape dot here
     }));
     return { paths, fallback: false };
 }
@@ -28,4 +28,3 @@ export default function Post({ frontMatter, content }) {
         </article>
     );
 }
-
