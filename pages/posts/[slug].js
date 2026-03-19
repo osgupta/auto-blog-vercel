@@ -7,7 +7,7 @@ export async function getStaticPaths() {
     const dir = path.join(process.cwd(), 'content', 'posts');
     const files = fs.readdirSync(dir).filter((f) => f.endsWith('.md'));
     const paths = files.map((f) => ({
-        params: { slug: f.replace(/:/g, '') } // escape dot here
+        params: { slug: f.replace(/[^a-zA-Z0-9\-]/g, '-') } // escape dot here
     }));
     return { paths, fallback: false };
 }
