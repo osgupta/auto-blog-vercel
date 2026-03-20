@@ -7,7 +7,15 @@ export async function getStaticPaths() {
     const dir = path.join(process.cwd(), 'content', 'posts');
     const files = fs.readdirSync(dir).filter((f) => f.endsWith('.md'));
     const paths = files.map((f) => ({
-        params: { slug: f.replace(/:/g, '') } // escape dot here
+        params: {
+            slug: f
+                .replace(/\.md$/, '') // remove extension
+                .replace(/:/g, '') // remove colons
+                .replace(/\s+/g, '-') // spaces -> dashes
+                .replace(/[^a-zA-Z0-9\-]/g, '-') // other bad chars -> dash
+                .replace(/-+/g, '-') // collapse dashes
+                .replace(/^-|-$/g, '') // trim edges
+        }
     }));
     return { paths, fallback: false };
 }
